@@ -1,0 +1,64 @@
+import tkinter as tk
+from PIL import ImageTk, Image
+import random
+
+root = tk.Tk()
+root.title("Rock-Paper-Scissors Game")
+root.geometry("400x400")
+
+# Images
+rock_img = ImageTk.PhotoImage(Image.open("rock.png"))
+paper_img = ImageTk.PhotoImage(Image.open("paper.png"))
+scissors_img = ImageTk.PhotoImage(Image.open("scissors.png"))
+computer_imgs = {
+    "Rock": ImageTk.PhotoImage(Image.open("computer_rock.png")),
+    "Paper": ImageTk.PhotoImage(Image.open("computer_paper.png")),
+    "Scissors": ImageTk.PhotoImage(Image.open("computer_scissors.png")),
+}
+
+# Game logic
+choices = ["Rock", "Paper", "Scissors"]
+
+def play_game(user_choice):
+    computer_choice = random.choice(choices)
+    computer_img_label.config(image=computer_imgs[computer_choice])
+    result = determine_winner(user_choice, computer_choice)
+    result_label.config(text=result)
+
+def determine_winner(user_choice, computer_choice):
+    if user_choice == computer_choice:
+        return "It's a tie!"
+    elif (
+        (user_choice == "Rock" and computer_choice == "Scissors") or
+        (user_choice == "Paper" and computer_choice == "Rock") or
+        (user_choice == "Scissors" and computer_choice == "Paper")
+    ):
+        return "You win!"
+    else:
+        return "Computer wins!"
+    
+user_choice_label = tk.Label(root, text="Your Choice:", font=("Arial", 16))
+user_choice_label.pack(pady=10)
+
+choices_frame = tk.Frame(root)
+choices_frame.pack()
+
+rock_button = tk.Button(choices_frame, image=rock_img, command=lambda: play_game("Rock"))
+rock_button.pack(side=tk.LEFT, padx=10)
+
+paper_button = tk.Button(choices_frame, image=paper_img, command=lambda: play_game("Paper"))
+paper_button.pack(side=tk.LEFT, padx=10)
+
+scissors_button = tk.Button(choices_frame, image=scissors_img, command=lambda: play_game("Scissors"))
+scissors_button.pack(side=tk.LEFT, padx=10)
+
+result_label = tk.Label(root, text="", font=("Arial", 16), pady=20)
+result_label.pack()
+
+computer_choice_label = tk.Label(root, text="Computer's Choice:", font=("Arial", 16))
+computer_choice_label.pack()
+
+computer_img_label = tk.Label(root)
+computer_img_label.pack(pady=10)
+
+root.mainloop()
